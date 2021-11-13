@@ -3,6 +3,8 @@ from signal import pause
 import telebot
 from time import sleep
 from bluedot import BlueDot
+import subprocess
+from multiprocessing import Process,Queue,Pipe
 
 #Definimos las varibale a utilizar en las diferentes funciones del proyecto WORKY
 bd = BlueDot()
@@ -11,29 +13,25 @@ leds = [PWMLED(17), PWMLED(27)] #Los de cuarto y baño
 API_TOKEN="2062315514:AAGhE-cja5Cvot5PDiBoi5I-y4OZuIZgQPU"
 bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=True
+f = open('base.txt')
+f.write("modoSeguro=True")
+f.close()
+#excribir txt
 intruso=True
+#txt
 password="default"
 
 #FUNCIONES para las caracteristicas de WORKY
 def inRange():
-    led.on()
+    led[0].on()
     #bot.send_message('1157726974','Se detecto movimiento, Alarma ENCENDIDA')
     #bot.send_message('@atorr55','Se detecto movimiento, Alarma ENCENDIDA')
     bot.send_message('-683852329','Se detecto movimiento, Alarma ENCENDIDA')
     return True
     
 def outOfRange():
-    led.off()
+    led[0].off()
     return True
-
-def encender(intruso):
-    while intruso:
-        print('Distance: ', sensor.distance * 100)
-        if((sensor.distance * 100) < 15):
-            intruso=False
-            inRange()
-        else:
-            outOfRange()
 
 def comando(pos):
     if pos.bottom:
@@ -47,8 +45,8 @@ def comando(pos):
         brightness = (pos.y + 1) / 2
         leds[led].value = brightness
     elif pos.top:
-        pass#Comando para activar el asistente
-
+        #Llamado al asistente con bandera de solo 1 instruccion
+        subprocess.call("python pushToTalk.py --once", shell=True)
 
 #Intrucciones ingresadas por medio de TELEGRAM escrito
 @bot.message_handler(commands=['Cambiar_contraseña'])
@@ -65,12 +63,20 @@ def send_welcome(message):
 Modo Seguro Apagado
 """)
     modo_seguro=False
+    f = open('base.txt')
+    f.write("modoSeguro=False")
+    f.close()
+    #txt
     
 @bot.message_handler(commands=['Activar_Seguridad'])
 def send_welcome(message):
     mensaje = ''
     if(message.text.split()[1:][0]==password):
         modo_seguro=True
+        f = open('base.txt')
+        f.write("modoSeguro=True")
+        f.close()
+        #txt
         mensaje="Se Activo el modo seguro"
     else:
         mensaje="Contraseña incorrecta"
@@ -87,7 +93,7 @@ Alarma Encendida
     encender(intruso)
 
 #Ejecucion por medio de BLUEDOT 
-bd.when_pressed = Comando
+bd.when_pressed = Comando()
 
 #Mantener siempre activo al bot programa en eterna ejecución
 bot.infinity_polling()
