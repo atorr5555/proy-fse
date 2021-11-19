@@ -20,12 +20,20 @@ bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
 banderaViolacion=False
 
+#Arrancar script de sendores
+os.system("sudo python sensoresBT.py")
+
+#TXT o base de datos [modo_seguro,banderaViolacion]
+with open('base.txt', 'w') as f:
+    f.write('False,False')
 
 #Intrucciones ingresadas por medio de TELEGRAM escrito
 @bot.message_handler(commands=['Desactivar_seguridad'])
 def send_welcome(message):
     modo_seguro=False
     banderaViolacion=False
+    with open('base.txt', 'w') as f:
+        f.write('False,False')
     bot.reply_to(message, """\
 Modo Seguro Apagado
 """)
@@ -33,6 +41,8 @@ Modo Seguro Apagado
 @bot.message_handler(commands=['Activar_Seguridad'])
 def send_welcome(message):
     modo_seguro=True
+    with open('base.txt', 'w') as f:
+        f.write('True,False')
     mensaje="Se Activo el modo seguro"
     bot.reply_to(message, """\
 """+mensaje)

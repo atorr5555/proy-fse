@@ -15,9 +15,12 @@ sensorTemp=Adafruit_DHT.DHT11
 API_TOKEN=""
 bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
+banderaViolacion=False
 
-#TXT o base de datos [modo_seguro]
-
+#TXT o base de datos [modo_seguro,banderaViolacion]
+f = open("base.txt")
+arregloBase=f.read()
+f.close()
 
 #Funciones
 def turnon():
@@ -25,6 +28,8 @@ def turnon():
         bot.send_message('-683852329','Se detecto movimiento, Alarma ENCENDIDA')
         os.system("sudo python ~/lightshowpi/py/synchronized_lights.py --file=/home/pi/Downloads/sonido.mp3")
         banderaViolacion=True
+        with open('base.txt', 'w') as f:
+            f.write('True,True')
     else:
         servo.max()
         print('ABIERTA')
@@ -51,6 +56,22 @@ def comando(pos):
         subprocess.call("python pushToTalk.py --once", shell=True)
 
 while True:
+    #Revisar "base" para verificar alteraciones por telegram
+    f = open("base.txt")
+    arregloBase=f.read()
+    f.close()
+    arregloBase.split(sep=',')
+
+    if(arregloBase[0]=='True'):
+        modo_seguro=True
+    else:
+        modo_seguro=False
+
+    if(arregloBase[1]=='True'):
+        banderaViolacion=True
+    else:
+        banderaViolacion=False
+
     #Ejecucion por medio de BLUEDOT 
     bd.when_pressed = comando
 
