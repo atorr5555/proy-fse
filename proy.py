@@ -6,6 +6,7 @@ import subprocess
 from multiprocessing import Process,Queue,Pipe
 import Adafruit_DHT 
 import os
+import tokens
 
 #Definimos las varibale a utilizar en las diferentes funciones del proyecto WORKY
 bd = BlueDot()
@@ -15,7 +16,7 @@ buttonCuarto = Button(2)
 buttonBaño = Button(3)
 servo=Servo(4)
 sensorTemp=Adafruit_DHT.DHT11
-API_TOKEN=""
+API_TOKEN=token
 bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
 banderaViolacion=False
