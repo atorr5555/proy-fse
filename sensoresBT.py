@@ -1,21 +1,19 @@
-from gpiozero import DistanceSensor, PWMLED,MotionSensor,Servo,Button
-from gpiozero import DistanceSensor, PWMLED,MotionSensor,Servo,Button
+from gpiozero import DistanceSensor, PWMLED,DistanceSensor,Servo
 import telebot
 from bluedot import BlueDot
 import Adafruit_DHT 
 import os
+from time import sleep
 
 bd = BlueDot()
 leds = [PWMLED(17), PWMLED(27)] #Los de cuarto y baño
-pir = MotionSensor(21)
-buttonCuarto = Button(2)
-buttonBaño = Button(3)
 servo=Servo(4)
 sensorTemp=Adafruit_DHT.DHT11
 API_TOKEN=""
 bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
 banderaViolacion=False
+#sensor = DistanceSensor(echo=24, trigger=23)
 
 #TXT o base de datos [modo_seguro,banderaViolacion]
 f = open("base.txt")
@@ -33,7 +31,7 @@ def turnon():
     else:
         servo.max()
         print('ABIERTA')
-        while(not(pir.motion_detected)):
+        while((sensor.distance * 100)<10):
             servo.max()
         servo.min()
         print('CERRADA')
@@ -43,24 +41,18 @@ def checarAlarma():
         os.system("sudo python ~/lightshowpi/py/synchronized_lights.py --file=/home/pi/Downloads/sonido.mp3")
 
 def comando(pos):
-    if pos.bottom:
-        led = 0
-        if(pos.x>0):
-            led=1 #Enciende luz de cuarto
-        if(pos.x<0):
-            led=0 #Enciende luz de baño
-        brightness = (pos.y + 1) / 2
-        leds[led].value = brightness
-    elif pos.top:
+    if pos.middle:
         #Llamado al asistente con bandera de solo 1 instruccion
-        subprocess.call("python pushToTalk.py --once", shell=True)
+        os.system("python pushtotalk.py --once")
+   
 
 while True:
     #Revisar "base" para verificar alteraciones por telegram
     f = open("base.txt")
     arregloBase=f.read()
     f.close()
-    arregloBase.split(sep=',')
+    arregloBase = arregloBase.split(sep=',')
+    print(arregloBase)
 
     if(arregloBase[0]=='True'):
         modo_seguro=True
@@ -76,20 +68,8 @@ while True:
     bd.when_pressed = comando
 
     #Sensor de proximidad
-    pir.when_motion=turnon
+    #if((sensor.distance * 100)<10):
+        #turnon()
 
     #Cuando la seguridad haya sido violada seguir activando la alarma
     checarAlarma()
-
-    #Switch
-    if(buttonBaño.is_pressed):
-        if(leds[0].value==0):
-            leds[0].value=1
-        else:
-            leds[0].value=0
-
-    if(buttonCuarto.is_pressed):
-        if(leds[1].value==0):
-            leds[1].value=1
-        else:
-            leds[1].value=0

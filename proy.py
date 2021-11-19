@@ -1,29 +1,30 @@
 from gpiozero import DistanceSensor, PWMLED,MotionSensor,Servo,Button
 import telebot
 from time import sleep
-from bluedot import BlueDot
 import subprocess
 from multiprocessing import Process,Queue,Pipe
 import Adafruit_DHT 
 import os
 import tokens
+import subprocess
 
 #Definimos las varibale a utilizar en las diferentes funciones del proyecto WORKY
-bd = BlueDot()
 leds = [PWMLED(17), PWMLED(27)] #Los de cuarto y baño
 pir = MotionSensor(21)
 buttonCuarto = Button(2)
 buttonBaño = Button(3)
 servo=Servo(4)
 sensorTemp=Adafruit_DHT.DHT11
-API_TOKEN=token
+API_TOKEN=tokens.token
 bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
 banderaViolacion=False
 
 #Arrancar script de sendores
-os.system("sudo python sensoresBT.py")
+p1=subprocess.Popen(["python", "sensoresBT.py"])
+p2=subprocess.Popen(["python", "leds.py"])
 
+print('PRUEBA')
 #TXT o base de datos [modo_seguro,banderaViolacion]
 with open('base.txt', 'w') as f:
     f.write('False,False')
@@ -103,6 +104,10 @@ Se ajusto la luz del baño
 
 #Mantener siempre activo al bot programa en eterna ejecución
 bot.infinity_polling()
+
+print('MATANDO SUBPROCESOS')
+p1.kill()
+p2.kill()
 
 
     
