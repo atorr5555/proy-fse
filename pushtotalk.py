@@ -23,14 +23,13 @@ import pathlib2 as pathlib
 import sys
 import time
 import uuid
-import RPi.GPIO as GPIO
 import click
 import grpc
 import google.auth.transport.grpc
 import google.auth.transport.requests
 import google.oauth2.credentials
 import youtube2
-from gpiozero import LED
+from gpiozero import PWMLED
 
 from google.assistant.embedded.v1alpha2 import (
     embedded_assistant_pb2,
@@ -419,9 +418,7 @@ def main(api_endpoint, credentials, project_id,
                 json.dump(payload, f)
 
     device_handler = device_helpers.DeviceRequestHandler(device_id)
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(25, GPIO.OUT, initial=GPIO.LOW)
-    GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW)
+    leds = [PWMLED(17), PWMLED(27)]
 
     @device_handler.command('action.devices.commands.OnOff')
     def onoff(on):
@@ -440,22 +437,23 @@ def main(api_endpoint, credentials, project_id,
             delay = 0.5
         for i in range(int(number)):
             logging.info('Device is blinking.')
-            GPIO.output(25, 1)
+            #GPIO.output(25, 1)
             time.sleep(delay)
-            GPIO.output(25, 0)
+            #GPIO.output(25, 0)
             time.sleep(1)
 
     @device_handler.command('com.example.commands.RoomLed')
     def roomLed(state, room):
         logging.info('Turning %s led' % state)
         logging.info('Selected room: %s' % room)
-        aux = 25
+        aux = 0
         if room == "BEDROOM":
-            aux = 8
+            aux = 1
         if state == "ON":
-            GPIO.output(aux, 1)
+            leds[aux].value=1
         else:
-            GPIO.output(aux, 0)
+            leds[aux].value=0
+            
     import webbrowser
     @device_handler.command('com.example.commands.play')
     def play(song):
