@@ -453,6 +453,15 @@ def main(api_endpoint, credentials, project_id,
             leds[aux].value=1
         else:
             leds[aux].value=0
+
+    @device_handler.command('com.example.commands.Intensity')
+    def roomLedParameters(percentage, room):
+        logging.info('Turning led at %s ' % percentage)
+        logging.info('Selected room: %s' % room)
+        aux = 0
+        if room == "BEDROOM":
+            aux = 1
+        leds[aux].value=percentage/100
             
     import webbrowser
     @device_handler.command('com.example.commands.play')
