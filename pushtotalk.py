@@ -461,8 +461,8 @@ def main(api_endpoint, credentials, project_id,
         aux = 0
         if room == "BEDROOM":
             aux = 1
-        leds[aux].value=percentage/100
-            
+        leds[aux].value=int(percentage)/100
+
     import webbrowser
     @device_handler.command('com.example.commands.play')
     def play(song):
