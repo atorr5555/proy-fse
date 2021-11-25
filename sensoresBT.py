@@ -51,8 +51,7 @@ while True:
     f = open("base.txt")
     arregloBase=f.read()
     f.close()
-    print(arregloBase)
-    arregloBase = arregloBase.split(sep=',')
+    arregloBase = anterior if len(arregloBase) == 0 else arregloBase.split(sep=',')
 
     if(arregloBase[0]=='True'):
         modo_seguro=True
@@ -73,3 +72,4 @@ while True:
 
     #Cuando la seguridad haya sido violada seguir activando la alarma
     checarAlarma()
+    anterior = arregloBase
