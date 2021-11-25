@@ -13,7 +13,7 @@ API_TOKEN=""
 bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
 banderaViolacion=False
-sensor = DistanceSensor(echo=24, trigger=23)
+sensor = DistanceSensor(echo=20, trigger=16)
 
 #TXT o base de datos [modo_seguro,banderaViolacion]
 f = open("base.txt")
