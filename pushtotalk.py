@@ -29,7 +29,7 @@ import google.auth.transport.grpc
 import google.auth.transport.requests
 import google.oauth2.credentials
 import youtube2
-from proy import leds
+from gpiozero import PWMLED
 
 from google.assistant.embedded.v1alpha2 import (
     embedded_assistant_pb2,
@@ -418,7 +418,7 @@ def main(api_endpoint, credentials, project_id,
                 json.dump(payload, f)
 
     device_handler = device_helpers.DeviceRequestHandler(device_id)
-    #leds = [PWMLED(17), PWMLED(27)]
+    leds = [PWMLED(17), PWMLED(27)]
 
     @device_handler.command('action.devices.commands.OnOff')
     def onoff(on):
