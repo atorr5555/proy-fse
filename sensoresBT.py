@@ -13,7 +13,7 @@ API_TOKEN=""
 bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
 banderaViolacion=False
-#sensor = DistanceSensor(echo=24, trigger=23)
+sensor = DistanceSensor(echo=24, trigger=23)
 
 #TXT o base de datos [modo_seguro,banderaViolacion]
 f = open("base.txt")
@@ -67,8 +67,9 @@ while True:
     bd.when_pressed = comando
 
     #Sensor de proximidad
-    #if((sensor.distance * 100)<10):
-        #turnon()
+    if((sensor.distance * 100)<10):
+        print(sensor.distance*100)
+        turnon()
 
     #Cuando la seguridad haya sido violada seguir activando la alarma
     checarAlarma()
