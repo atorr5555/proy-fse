@@ -51,8 +51,8 @@ while True:
     f = open("base.txt")
     arregloBase=f.read()
     f.close()
-    arregloBase = arregloBase.split(sep=',')
     print(arregloBase)
+    arregloBase = arregloBase.split(sep=',')
 
     if(arregloBase[0]=='True'):
         modo_seguro=True
