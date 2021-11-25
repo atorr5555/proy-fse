@@ -32,8 +32,10 @@ def turnon():
     else:
         servo.max()
         print('ABIERTA')
+        sleep(2)
         while((sensor.distance * 100)<10):
             servo.max()
+            sleep(2)
         servo.min()
         print('CERRADA')
 
