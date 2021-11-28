@@ -102,6 +102,21 @@ Se ajusto la luz del baño
         valor=message.text.split()[1:][0]
         leds[0].value=int(valor)/100
 
+@bot.message_handler(commands=['ayuda', 'help'])
+def help(message):
+    bot.reply_to(message, """\
+Lista de comandos disponibles
+
+EncenderBaño - Enciende la luz del baño
+EncenderCuarto - Enciende la luz del cuarto
+DatosAmbientales - Muestra la temperatura y humedad
+ApagarLuces - Apaga todas las luces
+ApagarBaño - Apaga la luz del baño
+ApagarCuarto -  Apaga la luz del cuarto
+Activar_Seguridad - Activa el modo seguro
+Desactivar_seguridad - Desactiva el modo seguro
+""")
+
 #Mantener siempre activo al bot programa en eterna ejecución
 bot.infinity_polling()
 
