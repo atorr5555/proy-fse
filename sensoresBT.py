@@ -5,6 +5,8 @@ import Adafruit_DHT
 import os
 from time import sleep
 import tokens
+import RPi.GPIO as GPIO
+import time
 
 bd = BlueDot()
 leds = [PWMLED(17), PWMLED(27)] #Los de cuarto y baño
@@ -15,11 +17,20 @@ bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
 banderaViolacion=False
 sensor = DistanceSensor(echo=20, trigger=16)
+channel = 21
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(channel, GPIO.IN)
 
 #TXT o base de datos [modo_seguro,banderaViolacion]
 f = open("base.txt")
 arregloBase=f.read()
 f.close()
+
+def callback(channel):
+    bot.send_message('-683852329','FUEGO DETECTADO. ALERTA')
+
+GPIO.add_event_detect(channel, GPIO.BOTH, bouncetime=300)  # let us know when the pin goes HIGH or LOW
+GPIO.add_event_callback(channel, callback)  # assign function to GPIO PIN, Run function on change
 
 #Funciones
 def turnon():
