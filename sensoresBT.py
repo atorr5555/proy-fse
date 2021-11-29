@@ -57,26 +57,7 @@ def checarAlarma():
 def comando(pos):
     if pos.middle:
         #Llamado al asistente con bandera de solo 1 instruccion
-        f = open("leds.txt")
-        arregloBase=f.read()
-        f.close()
-        arregloBase = arregloBase.split(sep=',')
-        arregloBase = [ float(x) for x in arregloBase ]
-        arregloBase[0] = leds[0].value
-        arregloBase[1] = leds[1].value
-        f = open("leds.txt", 'w')
-        f.write(str(arregloBase[0]) + ',' + str(arregloBase[1]))
-        f.close()
         os.system("python pushtotalk.py --once")
-        f = open("leds.txt")
-        arregloBase=f.read()
-        f.close()
-        arregloBase = arregloBase.split(sep=',')
-        print(arregloBase)
-        arregloBase = [ float(x) for x in arregloBase ]
-        print(arregloBase)
-        leds[0].value = arregloBase[0]
-        leds[1].value = arregloBase[1]
    
 
 while True:

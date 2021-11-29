@@ -58,18 +58,6 @@ CLOSE_MICROPHONE = embedded_assistant_pb2.DialogStateOut.CLOSE_MICROPHONE
 PLAYING = embedded_assistant_pb2.ScreenOutConfig.PLAYING
 DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
 
-def update_leds(led, state):
-    f = open("leds.txt")
-    arregloBase=f.read()
-    f.close()
-    arregloBase = arregloBase.split(sep=',')
-    arregloBase = [ float(x) for x in arregloBase ]
-    arregloBase[led] = state
-    f = open("leds.txt", 'w')
-    print(str(arregloBase[0]) + ',' + str(arregloBase[1]))
-    f.write(str(arregloBase[0]) + ',' + str(arregloBase[1]))
-    f.close()
-
 
 class SampleAssistant(object):
     """Sample Assistant that supports conversations and device actions.
@@ -462,11 +450,11 @@ def main(api_endpoint, credentials, project_id,
         if room == "BEDROOM":
             aux = 1
         if state == "ON":
-            #eds[aux].value=1.0
-            update_leds(aux, 1.0)
+            leds[aux].value=1
+            time.sleep(5)
         else:
-            #leds[aux].value=0.0
-            update_leds(aux, 0.0)
+            leds[aux].value=0
+            time.sleep(5)
 
     @device_handler.command('com.example.commands.Intensity')
     def roomLedParameters(percentage, room):
@@ -475,8 +463,8 @@ def main(api_endpoint, credentials, project_id,
         aux = 0
         if room == "BEDROOM":
             aux = 1
-        #leds[aux].value=int(percentage)/100
-        update_leds(aux, int(percentage)/100)
+        leds[aux].value=int(percentage)/100
+        time.sleep(5)
 
     import webbrowser
     @device_handler.command('com.example.commands.play')
