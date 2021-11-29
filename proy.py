@@ -20,14 +20,29 @@ bot=telebot.TeleBot(API_TOKEN)
 modo_seguro=False
 banderaViolacion=False
 
-#Arrancar script de sendores
-p1=subprocess.Popen(["python", "sensoresBT.py"])
-p2=subprocess.Popen(["python", "leds.py"])
 
 print('PRUEBA')
 #TXT o base de datos [modo_seguro,banderaViolacion]
 with open('base.txt', 'w') as f:
     f.write('False,False')
+# TXT para estado de los leds
+with open('leds.txt', 'w') as f:
+    f.write('0, 0')
+
+#Arrancar script de sendores
+p1=subprocess.Popen(["python", "sensoresBT.py"])
+p2=subprocess.Popen(["python", "leds.py"])
+
+def update_leds(led, state):
+    f = open("base.txt")
+    arregloBase=f.read()
+    f.close()
+    arregloBase = arregloBase.split(sep=',')
+    arregloBase = [ int(x) for x in arregloBase ]
+    arregloBase[led] = state
+    f = open("leds.txt", 'w')
+    f.write(str(arregloBase[0]) + ',' + str(arregloBase[1]))
+    f.close()
 
 #Intrucciones ingresadas por medio de TELEGRAM escrito
 @bot.message_handler(commands=['Desactivar_seguridad'])
@@ -55,6 +70,7 @@ def send_welcome(message):
 Se ajusto la luz del cuarto
 """)
     leds[1].value=0
+    update_leds(1, 0)
 
 @bot.message_handler(commands=['ApagarBaño'])
 def send_welcome(message):
@@ -62,6 +78,7 @@ def send_welcome(message):
 Se ajusto la luz del baño
 """)
     leds[0].value=0
+    update_leds(0, 0)
 
 @bot.message_handler(commands=['ApagarLuces'])
 def send_welcome(message):
@@ -70,6 +87,8 @@ Se apagaron las luces
 """)
     leds[0].value=0
     leds[1].value=0
+    update_leds(0, 0)
+    update_leds(1, 0)
 
 @bot.message_handler(commands=['DatosAmbientales'])
 def send_welcome(message):
@@ -85,9 +104,11 @@ Se ajusto la luz del cuarto
 """)
     if(len(message.text)==15):
         leds[1].value=1
+        update_leds(1, 1)
     else:
         valor=message.text.split()[1:][0]
         leds[1].value=int(valor)/100
+        update_leds(1, int(valor)/100)
 
 @bot.message_handler(commands=['EncenderBaño'])
 def send_welcome(message):
@@ -98,9 +119,11 @@ Se ajusto la luz del baño
     print(len(message.text))
     if(len(message.text)==13):
         leds[0].value=1
+        update_leds(0, 1)
     else:
         valor=message.text.split()[1:][0]
         leds[0].value=int(valor)/100
+        update_leds(0, int(valor)/100)
 
 @bot.message_handler(commands=['ayuda', 'help'])
 def help(message):

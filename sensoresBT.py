@@ -9,7 +9,6 @@ import RPi.GPIO as GPIO
 import time
 
 bd = BlueDot()
-leds = [PWMLED(17), PWMLED(27)] #Los de cuarto y baño
 servo=Servo(4)
 sensorTemp=Adafruit_DHT.DHT11
 API_TOKEN=tokens.token
