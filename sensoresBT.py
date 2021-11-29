@@ -9,6 +9,7 @@ import RPi.GPIO as GPIO
 import time
 
 bd = BlueDot()
+leds = [PWMLED(17), PWMLED(27)] #Los de cuarto y baño
 servo=Servo(4)
 sensorTemp=Adafruit_DHT.DHT11
 API_TOKEN=tokens.token
@@ -52,6 +53,13 @@ def turnon():
 def checarAlarma():
     if(modo_seguro and banderaViolacion):
         os.system("sudo python ~/lightshowpi/py/synchronized_lights.py --file=/home/pi/Downloads/sonido.mp3")
+        f = open("leds.txt")
+        arregloBase=f.read()
+        f.close()
+        arregloBase = arregloBase.split(sep=',')
+        arregloBase = [ int(x) for x in arregloBase ]
+        leds[0].value = arregloBase[0]
+        leds[1].value = arregloBase[1]
 
 def comando(pos):
     if pos.middle:
