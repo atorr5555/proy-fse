@@ -29,6 +29,9 @@ print('PRUEBA')
 with open('base.txt', 'w') as f:
     f.write('False,False')
 
+with open('leds.txt', 'w') as f:
+    f.write('0,0')
+
 #Intrucciones ingresadas por medio de TELEGRAM escrito
 @bot.message_handler(commands=['Desactivar_seguridad'])
 def send_welcome(message):
