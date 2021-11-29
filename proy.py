@@ -30,7 +30,7 @@ with open('base.txt', 'w') as f:
     f.write('False,False')
 
 with open('leds.txt', 'w') as f:
-    f.write('0,0')
+    f.write('0.0,0.0')
 
 #Intrucciones ingresadas por medio de TELEGRAM escrito
 @bot.message_handler(commands=['Desactivar_seguridad'])
@@ -57,22 +57,22 @@ def send_welcome(message):
     bot.reply_to(message, """\
 Se ajusto la luz del cuarto
 """)
-    leds[1].value=0
+    leds[1].value=0.0
 
 @bot.message_handler(commands=['ApagarBaño'])
 def send_welcome(message):
     bot.reply_to(message, """\
 Se ajusto la luz del baño
 """)
-    leds[0].value=0
+    leds[0].value=0.0
 
 @bot.message_handler(commands=['ApagarLuces'])
 def send_welcome(message):
     bot.reply_to(message, """\
 Se apagaron las luces
 """)
-    leds[0].value=0
-    leds[1].value=0
+    leds[0].value=0.0
+    leds[1].value=0.0
 
 @bot.message_handler(commands=['DatosAmbientales'])
 def send_welcome(message):
@@ -87,7 +87,7 @@ def send_welcome(message):
 Se ajusto la luz del cuarto
 """)
     if(len(message.text)==15):
-        leds[1].value=1
+        leds[1].value=1.0
     else:
         valor=message.text.split()[1:][0]
         leds[1].value=int(valor)/100
@@ -100,7 +100,7 @@ Se ajusto la luz del baño
     print(message.text)
     print(len(message.text))
     if(len(message.text)==13):
-        leds[0].value=1
+        leds[0].value=1.0
     else:
         valor=message.text.split()[1:][0]
         leds[0].value=int(valor)/100

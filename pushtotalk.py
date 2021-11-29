@@ -462,11 +462,11 @@ def main(api_endpoint, credentials, project_id,
         if room == "BEDROOM":
             aux = 1
         if state == "ON":
-            leds[aux].value=1
-            update_leds(aux, 1)
+            leds[aux].value=1.0
+            update_leds(aux, 1.0)
         else:
-            leds[aux].value=0
-            update_leds(aux, 0)
+            leds[aux].value=0.0
+            update_leds(aux, 0.0)
 
     @device_handler.command('com.example.commands.Intensity')
     def roomLedParameters(percentage, room):

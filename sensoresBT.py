@@ -72,7 +72,9 @@ def comando(pos):
         arregloBase=f.read()
         f.close()
         arregloBase = arregloBase.split(sep=',')
+        print(arregloBase)
         arregloBase = [ float(x) for x in arregloBase ]
+        print(arregloBase)
         leds[0].value = arregloBase[0]
         leds[1].value = arregloBase[1]
    
