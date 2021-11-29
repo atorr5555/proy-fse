@@ -462,10 +462,10 @@ def main(api_endpoint, credentials, project_id,
         if room == "BEDROOM":
             aux = 1
         if state == "ON":
-            leds[aux].value=1.0
+            #eds[aux].value=1.0
             update_leds(aux, 1.0)
         else:
-            leds[aux].value=0.0
+            #leds[aux].value=0.0
             update_leds(aux, 0.0)
 
     @device_handler.command('com.example.commands.Intensity')
@@ -475,7 +475,7 @@ def main(api_endpoint, credentials, project_id,
         aux = 0
         if room == "BEDROOM":
             aux = 1
-        leds[aux].value=int(percentage)/100
+        #leds[aux].value=int(percentage)/100
         update_leds(aux, int(percentage)/100)
 
     import webbrowser
