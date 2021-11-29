@@ -59,7 +59,7 @@ PLAYING = embedded_assistant_pb2.ScreenOutConfig.PLAYING
 DEFAULT_GRPC_DEADLINE = 60 * 3 + 5
 
 def update_leds(led, state):
-    f = open("base.txt")
+    f = open("leds.txt")
     arregloBase=f.read()
     f.close()
     arregloBase = arregloBase.split(sep=',')

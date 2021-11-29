@@ -34,7 +34,7 @@ p1=subprocess.Popen(["python", "sensoresBT.py"])
 p2=subprocess.Popen(["python", "leds.py"])
 
 def update_leds(led, state):
-    f = open("base.txt")
+    f = open("leds.txt")
     arregloBase=f.read()
     f.close()
     arregloBase = arregloBase.split(sep=',')
