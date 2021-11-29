@@ -461,7 +461,7 @@ def main(api_endpoint, credentials, project_id,
         logging.info('Turning led at %s ' % percentage)
         logging.info('Selected room: %s' % room)
         aux = 0
-        if room == "the bedroom":
+        if room == "the bedroom" or room == "bedroom":
             aux = 1
         leds[aux].value=int(percentage)/100
         time.sleep(5)
