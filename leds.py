@@ -19,8 +19,8 @@ while True:
     arregloBase = anterior if len(arregloBase) == 0 else arregloBase.split(sep=',')
     arregloBase = [ int(x) for x in arregloBase ]
 
-    leds[0].value = arregloBase[0]
-    leds[1].value = arregloBase[1]
+    leds[0].value = int(arregloBase[0])
+    leds[1].value = int(arregloBase[1])
     print(arregloBase)
 
     if(buttonBaño.is_pressed):
