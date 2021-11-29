@@ -61,7 +61,7 @@ def comando(pos):
         arregloBase=f.read()
         f.close()
         arregloBase = arregloBase.split(sep=',')
-        arregloBase = [ int(x) for x in arregloBase ]
+        arregloBase = [ float(x) for x in arregloBase ]
         arregloBase[0] = leds[0].value
         arregloBase[1] = leds[1].value
         f = open("leds.txt", 'w')
@@ -72,7 +72,7 @@ def comando(pos):
         arregloBase=f.read()
         f.close()
         arregloBase = arregloBase.split(sep=',')
-        arregloBase = [ int(x) for x in arregloBase ]
+        arregloBase = [ float(x) for x in arregloBase ]
         leds[0].value = arregloBase[0]
         leds[1].value = arregloBase[1]
    

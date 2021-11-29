@@ -63,7 +63,7 @@ def update_leds(led, state):
     arregloBase=f.read()
     f.close()
     arregloBase = arregloBase.split(sep=',')
-    arregloBase = [ int(x) for x in arregloBase ]
+    arregloBase = [ float(x) for x in arregloBase ]
     arregloBase[led] = state
     f = open("leds.txt", 'w')
     f.write(str(arregloBase[0]) + ',' + str(arregloBase[1]))
